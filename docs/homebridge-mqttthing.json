@@ -1,0 +1,74 @@
+{
+  "accessory": "mqttthing",
+  "type": "heaterCooler",
+  "name": "CostWay AC",
+  "url": "mqtt://BROKER_IP:1883",
+  "logMqtt": false,
+  "minTemperature": 16,
+  "maxTemperature": 31,
+  "restrictHeaterCoolerState": [
+    0,
+    1,
+    2
+  ],
+  "topics": {
+    "getOnline": {
+      "topic": "acir/costway/availability",
+      "apply": "return message === 'online';"
+    },
+    "getActive": {
+      "topic": "acir/costway/state",
+      "apply": "return JSON.parse(message).mode !== 'off';"
+    },
+    "setActive": {
+      "topic": "acir/costway/set/mode",
+      "apply": "return message ? 'cool' : 'off';"
+    },
+    "getCurrentHeaterCoolerState": {
+      "topic": "acir/costway/state",
+      "apply": "var m = JSON.parse(message).mode; if (m === 'off') return 'INACTIVE'; if (m === 'heat') return 'HEATING'; if (m === 'cool') return 'COOLING'; return 'IDLE';"
+    },
+    "getTargetHeaterCoolerState": {
+      "topic": "acir/costway/state",
+      "apply": "var m = JSON.parse(message).mode; if (m === 'heat') return 'HEAT'; if (m === 'cool') return 'COOL'; return 'AUTO';"
+    },
+    "setTargetHeaterCoolerState": {
+      "topic": "acir/costway/set/mode",
+      "apply": "if (message === 'HEAT') return 'heat'; if (message === 'COOL') return 'cool'; return 'auto';"
+    },
+    "getCurrentTemperature": {
+      "topic": "acir/costway/state",
+      "apply": "return JSON.parse(message).temperature;"
+    },
+    "getCoolingThresholdTemperature": {
+      "topic": "acir/costway/state",
+      "apply": "return JSON.parse(message).temperature;"
+    },
+    "setCoolingThresholdTemperature": {
+      "topic": "acir/costway/set/temperature"
+    },
+    "getHeatingThresholdTemperature": {
+      "topic": "acir/costway/state",
+      "apply": "return JSON.parse(message).temperature;"
+    },
+    "setHeatingThresholdTemperature": {
+      "topic": "acir/costway/set/temperature"
+    },
+    "getRotationSpeed": {
+      "topic": "acir/costway/state",
+      "apply": "var f = JSON.parse(message).fan_mode; return {auto: 0, min: 25, low: 50, med: 75, high: 100}[f] || 0;"
+    },
+    "setRotationSpeed": {
+      "topic": "acir/costway/set/fan_mode",
+      "apply": "if (message < 13) return 'auto'; if (message < 38) return 'min'; if (message < 63) return 'low'; if (message < 88) return 'med'; return 'high';"
+    },
+    "getSwingMode": {
+      "topic": "acir/costway/state",
+      "apply": "return JSON.parse(message).swing_mode === 'vertical' ? 'ENABLED' : 'DISABLED';"
+    },
+    "setSwingMode": {
+      "topic": "acir/costway/set/swing_mode",
+      "apply": "return message === 'ENABLED' ? 'vertical' : 'off';"
+    }
+  }
+}

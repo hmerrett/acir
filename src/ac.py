@@ -85,3 +85,17 @@ def set(temp=None, mode=None, fan=None, swing=None, turbo=None, econo=None):
 def resend():
     """Retransmit the current state, for when a command was missed."""
     return _transmit()
+
+
+def blast(seconds=30, interval_s=2):
+    """Retransmit the current state repeatedly, for aiming at the unit.
+
+    Toggles power each time so a working link is unmistakable: the AC should
+    click on and off roughly every two seconds.
+    """
+    import time
+    print("transmitting for {}s -- aim at the AC's IR window".format(seconds))
+    for i in range(int(seconds / interval_s)):
+        _transmit(power=(i % 2 == 0))
+        time.sleep(interval_s)
+    print("done")

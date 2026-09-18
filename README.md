@@ -1,14 +1,17 @@
 # acir
 
-Control a CostWay portable air conditioner over IR from a Raspberry Pi Pico W,
+Control a CostWay mini-split air conditioner over IR from a Raspberry Pi Pico W,
 exposed to Home Assistant as a `climate` entity via MQTT.
 
 The unit speaks **TCL112**. That was established by capturing the original
 remote, not by guessing — see [Protocol](#protocol).
 
+![Assembled case](docs/img/case-assembled.png)
+
 ## Status
 
-Working and in use. Tested with:
+Working and in use — confirmed controlling the AC end to end, from the Home
+Assistant UI through MQTT to the unit. Tested with:
 
 - Raspberry Pi Pico W (RP2040), MicroPython 1.29.0
 - CostWay portable AC with a TCL-family remote (`23 CB 26` prefix)
@@ -50,6 +53,16 @@ Gotchas:
 - Boards sold as "RP2040 Pico W" with USB-C are clones using an ESP8285 on
   UART0, not a CYW43. MicroPython's `network.WLAN` cannot drive them.
 - Don't use GP23/24/25/29 — wifi and power circuitry.
+
+## Case
+
+Two-part printed enclosure. The hole in the lid is for the IR LED; the cutout
+at the end clears the USB connector.
+
+![Case interior](docs/img/case-open.png)
+
+STL: [`hardware/pico-case.stl`](hardware/pico-case.stl). Printed in PETG, no
+supports needed.
 
 ## Install
 
@@ -121,6 +134,7 @@ src/            firmware for the Pico
 tools/          host-side capture and analysis (needs a Broadlink RM)
 tests/          host-side tests, no hardware
 docs/           Home Assistant and HomeBridge setup
+hardware/       printable case
 captures/       IR frames captured from the original remote
 ```
 

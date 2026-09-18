@@ -3,3 +3,4 @@ __pycache__/
 secrets.py
 src/secrets.py
 .venv/
+.DS_Store
